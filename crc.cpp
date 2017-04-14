@@ -61,7 +61,6 @@ class Polinom{
 		Polinom operator-(Polinom p){
 			Polinom res = *this;
 			int deg  = this->degree < p.degree ? this->degree : p.degree ;
-			// std::cout<<((this->polinom[deg])^(p.polinom[deg]))<<std::endl;
 			for(int i=deg; i >= 0 ; i--){
 				res.polinom[i] = (this->polinom[i])^(p.polinom[i]);
 			}
@@ -77,26 +76,9 @@ class Polinom{
 		Polinom operator%(Polinom p){
 			Polinom r = *this;
 			int shift;
-			// std::cout << this->degree<<std::endl;
-			// std::cout<<"zerossssss   "<<polinom[0]<<std::endl;
-			//
-			// for(int i=0;i<=r.degree;i++){
-			// 	std::cout<<r.polinom[i];
-			// }
-			// std::cout<<std::endl;
-			// std::cout<<"*****************************************"<<std::endl;
-			// for(int i=p.degree;i>=0;i--){
-			// 	std::cout<<" "<<p.polinom[i]<<" ";
-			// }
-			// std::cout<<std::endl;
-			// std::cout<<"*****************************************"<<std::endl;
 			while(  r.degree != 0 &&  r.degree >= p.degree ){
 				shift = r.degree - p.degree;
 				r = r - (p << shift);
-				// std::cout<<"r: ";
-				// r.print();
-				// std::cout<<"p: ";
-				// p.print();
 			}
 			return r;
 		}
@@ -131,7 +113,6 @@ class Polinom{
 void encode(unsigned char* msg, int len, unsigned int p, int g ,unsigned char* e_msg){
 	Polinom M(msg,len),G(p,g);
 	Polinom T = (M<<g) - ((M<<g)%G);
-	T.print();
 	T.toChar(e_msg);
 }
 
