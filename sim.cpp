@@ -1,5 +1,7 @@
-
+#include <iostream>
+#include <string.h>
 #include "crc.hpp"
+
 
 #define NUM_SIMULATIONS 2000
 
@@ -13,6 +15,9 @@ unsigned char msg[60]={0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xbc, 0x14,
 					   0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
 					   0x00, 0x00, 0x00, 0x00};
 
+// unsigned char msg[2]={0xbc,0xff};
+
+
 unsigned int CRC1=0x1; //g=1
 unsigned int CRC64=0x0; //g=64
 unsigned int CRC15=0x4001; //g=15
@@ -21,6 +26,14 @@ unsigned int CRC32=0x04c11db7; //g=32
 
 
 int main(){
-	//Your simulation here!
+    unsigned char buff[100];
+    memset(buff,0,100);
+	encode(msg, 60, CRC1, 1 ,buff);
+    std::cout<<"length = "<<strlen((char*)buff)<<std::endl;
+    if(validate(buff, strlen((char*)buff), CRC1, 1)){
+        std::cout<<"OK!"<<std::endl;
+        return 0;
+    }
+    std::cout<<"FUCK YOU! GO FIX YOUR CODE!"<<std::endl;
 	return 0;
 }
