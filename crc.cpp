@@ -60,8 +60,7 @@ class Polinom{
 		}
 
 		friend Polinom operator-(Polinom a,Polinom b){
-			Polinom res = a;
-			assert(a.degree >= b.degree);
+			Polinom res = a.degree < b.degree  ? b : a ;
 			int deg  = a.degree < b.degree ? a.degree : b.degree ;
 			for(int i=deg; i >= 0 ; i--){
 				res.polinom[i] = (a.polinom[i])^(b.polinom[i]);
@@ -84,6 +83,7 @@ class Polinom{
 			}
 			return r;
 		}
+		//todo: check!
 		void print(){
 			for(int i=degree;i>=0;i--){
 				std::cout<<polinom[i]<<" ";
@@ -98,9 +98,6 @@ class Polinom{
 				}
 				buff[i/8] = c;
 			}
-		}
-		int getDegree(){
-			return this->degree;
 		}
 };
 
@@ -129,19 +126,6 @@ void encode(unsigned char* msg, int len, unsigned int p, int g ,unsigned char* e
 bool validate(unsigned char* msg, int len, unsigned int p, int g){
 	Polinom zero,G(p,g),M(msg,len);
 	Polinom P = ( M % G );
+	cout<<"blalsaddsaba"<<endl;
 	return ( zero == P );
 }
-
-
-//
-// int main(){
-// 	unsigned char t1[]={0x10,0xe1};
-// 	unsigned char t2[]={0x11,0xe1};
-// 	Polinom P1(t1,2),P2(t2,2);
-// 	Polinom P=P1-P2;
-// 	if(P==Polinom()){
-// 		std::cout<<"my milkshake brings all the boys to tha yard";
-// 	}
-//
-// 	return 0;
-// }
