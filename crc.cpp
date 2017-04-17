@@ -1,9 +1,11 @@
 #include<vector>
 #include<iostream>
+#include<cassert>
 #include "crc.hpp"
 
 using std::vector;
-
+using std::cout;
+using std::endl;
 
 
 
@@ -11,7 +13,7 @@ class Polinom{
 	int degree;
 	vector<bool> polinom;
 	public:
-		Polinom(unsigned char*  _polinom,int len):polinom(len*8,false){
+		Polinom(unsigned char*  _polinom,int len):polinom(len*8,false),degree(-1){
 			for(int i=0; i<len*8; i++){
 				polinom[i] = (_polinom[i/8] & (1<<(i%8)))>>(i%8);
 			}
@@ -27,9 +29,8 @@ class Polinom{
 				polinom[i] =  (_polinom & (1<<i))>>i;
 			}
 			polinom[_degree]=true;
-			std::cout<<std::endl;
 		}
-		Polinom():degree(0),polinom(1,false){}
+		Polinom():degree(-1),polinom(1,false){}
 
 		friend bool operator<(Polinom A,Polinom B){
 			if(A.degree < B.degree)
@@ -58,15 +59,16 @@ class Polinom{
 			return res;
 		}
 
-		Polinom operator-(Polinom p){
-			Polinom res = *this;
-			int deg  = this->degree < p.degree ? this->degree : p.degree ;
+		friend Polinom operator-(Polinom a,Polinom b){
+			Polinom res = a;
+			assert(a.degree >= b.degree);
+			int deg  = a.degree < b.degree ? a.degree : b.degree ;
 			for(int i=deg; i >= 0 ; i--){
-				res.polinom[i] = (this->polinom[i])^(p.polinom[i]);
+				res.polinom[i] = (a.polinom[i])^(b.polinom[i]);
 			}
-			for(int i=this->degree; i >=0; i--){
+			for(int i=deg; i >= 0; i--){
 				if(res.polinom[i]){
-					res.degree=i;
+					res.degree = i;
 					break;
 				}
 			}
@@ -91,13 +93,14 @@ class Polinom{
 		void toChar(unsigned char* buff){
 			for(int i=0;i<this->degree;i+=8){
 				char c = 0;
-				// std::cout<<" i: "<<i<<std::endl;
 				for(int j=0;j<8;j++){
-					// std::cout<<" j: "<<j<<std::endl;
 					c = c+((polinom[i+j])<<j);
 				}
 				buff[i/8] = c;
 			}
+		}
+		int getDegree(){
+			return this->degree;
 		}
 };
 
@@ -126,7 +129,6 @@ void encode(unsigned char* msg, int len, unsigned int p, int g ,unsigned char* e
 bool validate(unsigned char* msg, int len, unsigned int p, int g){
 	Polinom zero,G(p,g),M(msg,len);
 	Polinom P = ( M % G );
-	P.print();
 	return ( zero == P );
 }
 

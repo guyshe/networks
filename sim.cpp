@@ -29,8 +29,7 @@ int main(){
     unsigned char buff[100];
     memset(buff,0,100);
 	encode(msg, 60, CRC1, 1 ,buff);
-    std::cout<<"length = "<<strlen((char*)buff)<<std::endl;
-    if(validate(buff, strlen((char*)buff), CRC1, 1)){
+    if(validate(buff, 60, CRC1, 1)){
         std::cout<<"OK!"<<std::endl;
         return 0;
     }
