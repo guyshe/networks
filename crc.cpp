@@ -121,18 +121,8 @@ using std::endl;
  * */
 void encode(unsigned char* msg, int len, unsigned int p, int g ,unsigned char* e_msg){
 	Polinom M(msg,len),G(p,g);
-	// cout<<"((M<<g)%G):"<<((M<<g)%G).getDegree()<<endl;
-	// ((M<<g)%G).print();
-	// cout<<"(M<<g):"<<(M<<g).getDegree()<<endl;
 	Polinom T = (M<<g) - ((M<<g)%G);
-	// cout<<"encode:"<<endl;
-	// T.print();
-
 	T.toChar(e_msg);
-	// cout<<"char: "<<endl;
-	// for(int i=0;i<=(T.getDegree())/8+1;i++){
-	// 	printf("%x",e_msg);
-	// }
 }
 
 /*
@@ -144,8 +134,6 @@ void encode(unsigned char* msg, int len, unsigned int p, int g ,unsigned char* e
  * */
 bool validate(unsigned char* msg, int len, unsigned int p, int g){
 	Polinom zero,G(p,g),M(msg,len);
-	// cout<<"validate: ";
-	// M.print();
 	Polinom P = ( M % G );
 	return ( zero == P );
 }
